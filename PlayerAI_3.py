@@ -1,37 +1,46 @@
 from random import randint
 from BaseAI_3 import BaseAI
+import sys
+
+sys.setrecursionlimit(10**9)
 
 class PlayerAI(BaseAI): #It takes the class BaseAI as parent
     def getMove(self, grid):	
-        (child,utility) = self.maximize(grid)
-        return child
+    	""" returns the next move in a number"""
+    	(move,utility) = self.maximize(grid,-1.3)
+    	return move
 
-    def maximize(self, grid):
+    def maximize(self, grid, move):
     	"""returns tuple of (grid, utility)"""
     	if self.terminal_test(grid):
-    		return (None, self.utility(grid))
+    		return (move, self.utility(grid))
 
     	(maxchild,maxutility) = (None,-1.0) 
 
-    	# here we have to find a way to make a move...
-    	for child in self.children(grid):
-    		(childprima, utility) = self.minimize(child)
+    	grids = self.children(grid)[0::2]
+    	moves = self.children(grid)[1::2]
+    	for child_grid in grids:
+    		child_move = moves[grids.index(child_grid)]
+    		(childprima, utility) = self.minimize(child_grid,child_move)
     		if utility > maxutility:
-    			(maxchild,maxutility) = (child, utility)
+    			(maxchild,maxutility) = (child_move, utility)
 
     	return (maxchild,maxutility)
 
-    def minimize(self, grid):
+    def minimize(self, grid, move):
     	"""returns tuple of (grid, utility)"""
     	if self.terminal_test(grid):
-    		return (None, self.utility(grid))
+    		return (move, self.utility(grid))
 
     	(minchild,minutility) = (None,1e10) 
 
-    	for child in self.children(grid)
-    		(childprima, utility) = self.maximize(child)
+    	grids = self.children(grid)[0::2]
+    	moves = self.children(grid)[1::2]
+    	for child_grid in grids:
+    		child_move = moves[grids.index(child_grid)]
+    		(childprima, utility) = self.maximize(child_grid,child_move)
     		if utility < minutilty:
-    			(minchild,minutility) = (child, utility)
+    			(minchild,minutility) = (child_move, utility)
 
     	return (minchild,minutility)
 
@@ -45,10 +54,15 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
     	return not grid.canMove()
 
     def children(self, grid):
-    	"""Returns a list with the children grids of a given grid"""
+    	"""Returns a list with the children nodes of a given grid"""
     	children = []
 
-    	
+    	for move in grid.getAvailableMoves():
+    		gridcopy = grid.clone()
+    		gridcopy.move(move)
+    		children.append(gridcopy)
+    		children.append(move) 
+
     	return children
 
 
