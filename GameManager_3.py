@@ -105,6 +105,7 @@ class GameManager:
 
             turn = 1 - turn
         print(maxTile)
+        print("game is over")
 
     def isGameOver(self):
         return not self.grid.canMove()
@@ -133,5 +134,5 @@ def main():
 
     gameManager.start()
 
-if __name__ == '__main__':
+if __name__ == '__main__': #This is to ensure the function "main" does not execute if this file was imported.
     main()
