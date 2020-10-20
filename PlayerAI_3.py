@@ -6,4 +6,3 @@ class PlayerAI(BaseAI):
         moves = grid.getAvailableMoves()
         return moves[randint(0, len(moves) - 1)] if moves else None
 
-print("hello")
