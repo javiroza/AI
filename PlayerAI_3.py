@@ -16,7 +16,7 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 		"""returns tuple of (grid, utility)"""
 		counter += 1
 		if self.terminal_test(grid) or counter > 5:
-			return (move, self.utility(grid))
+			return (move, self.eval(grid))
 
 		(maxchild,maxutility) = (None,-1.0) 
 
@@ -29,7 +29,7 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 				if utility > maxutility:
 					(maxchild,maxutility) = (child_move, utility)
 			else:
-				return (move, self.utility(grid))
+				return (move, self.eval(grid))
 			if maxutility >= self.beta:
 				break
 			if maxutility > self.alpha:
@@ -41,7 +41,7 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 		"""returns tuple of (grid, utility)"""
 		counter += 1
 		if self.terminal_test(grid) or counter > 5:
-			return (move, self.utility(grid))
+			return (move, self.eval(grid))
 
 		(minchild,minutility) = (None,1e10) 
 
@@ -54,7 +54,7 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 				if utility < minutility:
 					(minchild,minutility) = (child_move, utility)
 			else:
-				return(move, self.utility(grid))
+				return(move, self.eval(grid))
 			if minutility <= self.alpha:
 				break
 			if minutility > self.beta:
@@ -84,6 +84,30 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 
 		return children
 
+	def eval(self, grid):
+		a = 0
+		b = 1
+		return a*self.f1(grid) + b*self.f2(grid)
+
+	def f1(self, grid):
+		"""returns the sum of the squared values of the tiles"""
+		sumsquare = 0
+
+
+		return sumsquare
+
+	def f2(self, grid):
+		zeros = 0
+		for i in grid.map:
+			for j in i:
+				if j == 0:
+					zeros += 1
+		return zeros
+
+
+
+
+
 ############ Notes ###############
 # Without alpha-beta pruning we can see that it hardly ever gets to do
 # a "right" or "left" move, since they are checked last.
@@ -91,4 +115,6 @@ class PlayerAI(BaseAI): #It takes the class BaseAI as parent
 # Whith alpha-beta pruning we see many more of the moves mentioned above,
 # which means that it can do so within the time limit.
 
+# f1 is defined this way to promote high-valued tiles in general, not only
+# the the maximum one
 
